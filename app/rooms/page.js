@@ -6,60 +6,79 @@ import Link from "next/link";
 export default function Rooms() {
   const [rooms, setRooms] = useState([]);
 
-  // ✅ Fetch rooms from API
   useEffect(() => {
     async function fetchRooms() {
       const res = await fetch("/api/rooms");
       const data = await res.json();
-      setRooms(data); // ✅ Store rooms from database
+      setRooms(data);
     }
     fetchRooms();
   }, []);
 
   return (
     <div className="container mx-auto px-6 py-20">
-      <h2 className="text-4xl font-bold text-primary text-center">
-        Available Rooms
+      <h2 className="text-5xl font-extrabold text-primary text-center mb-12">
+        Discover Your Stay
       </h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
         {rooms.length > 0 ? (
           rooms.map((room) => (
             <div
               key={room._id}
-              className="bg-white rounded-lg shadow-lg overflow-hidden"
+              className="relative bg-white rounded-2xl shadow-xl overflow-hidden transition transform hover:scale-105 hover:shadow-2xl"
             >
-              {/* ✅ Fix: Show the first image if multiple images exist */}
-              <Image
-                src={
-                  room.images?.length > 0 ? room.images[0] : "/default-room.jpg"
-                }
-                alt={room.name}
-                width={400}
-                height={250}
-                className="w-full h-48 object-cover"
-              />
+              {/* 🖼️ Image with Overlay */}
+              <div className="relative w-full h-64">
+                <Image
+                  src={
+                    room.images?.length > 0
+                      ? room.images[0]
+                      : "/default-room.jpg"
+                  }
+                  alt={room.name}
+                  layout="fill"
+                  objectFit="cover"
+                  className="rounded-t-2xl"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent"></div>
+              </div>
 
+              {/* 🏨 Room Details */}
               <div className="p-6">
-                <h3 className="text-2xl font-bold text-primary">{room.name}</h3>
+                <h3 className="text-3xl font-semibold text-primary mb-2">
+                  {room.name}
+                </h3>
 
-                {/* ✅ Display Pricing */}
-                <p className="text-gray-600 mt-2">
-                  <span className="font-semibold">Full Board:</span> $
-                  {room.prices?.fullBoard}
-                </p>
-                <p className="text-gray-600">
-                  <span className="font-semibold">Half Board:</span> $
-                  {room.prices?.halfBoard}
-                </p>
-                <p className="text-gray-600">
-                  <span className="font-semibold">Hourly:</span> $
-                  {room.prices?.hourly}
-                </p>
+                {/* 💰 Pricing */}
+                <div className="flex flex-col gap-1 text-gray-700">
+                  <p>
+                    <span className="font-semibold text-lg text-accent">
+                      Full Board:
+                    </span>{" "}
+                    <span className="text-lg">
+                      LKR {room.prices?.fullBoard}
+                    </span>
+                  </p>
+                  <p>
+                    <span className="font-semibold text-lg text-secondary">
+                      Half Board:
+                    </span>{" "}
+                    <span className="text-lg">
+                      LKR {room.prices?.halfBoard}
+                    </span>
+                  </p>
+                  <p>
+                    <span className="font-semibold text-lg text-gold">
+                      Hourly:
+                    </span>{" "}
+                    <span className="text-lg">LKR {room.prices?.hourly}</span>
+                  </p>
+                </div>
 
-                {/* ✅ View Room Button */}
+                {/* 🔘 View Room Button */}
                 <Link href={`/rooms/${room._id}`}>
-                  <button className="mt-4 bg-secondary text-white px-4 py-2 rounded hover:bg-red-700 transition">
+                  <button className="mt-6 w-full bg-secondary text-white text-lg font-semibold py-3 rounded-xl hover:bg-red-700 transition-all shadow-md">
                     View Room
                   </button>
                 </Link>
@@ -67,7 +86,7 @@ export default function Rooms() {
             </div>
           ))
         ) : (
-          <p className="text-center text-gray-600 col-span-3">
+          <p className="text-center text-gray-600 col-span-3 text-xl">
             No rooms available. Please check back later.
           </p>
         )}

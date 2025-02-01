@@ -37,52 +37,62 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 🛏️ Featured Rooms (Dynamic from Database) */}
+      {/* 🏨 Featured Rooms (Dynamic from Database) */}
       <section className="container mx-auto px-6 py-20">
         <h2 className="text-4xl font-bold text-primary text-center">
           Our Rooms
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-10">
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-12">
           {rooms.length > 0 ? (
             rooms.map((room) => (
               <div
                 key={room._id}
-                className="bg-white rounded-lg shadow-lg overflow-hidden"
+                className="bg-white rounded-xl shadow-lg overflow-hidden transition transform hover:scale-105 hover:shadow-2xl"
               >
-                {/* ✅ Fix: Show the first image if multiple images exist */}
-                <Image
-                  src={
-                    room.images?.length > 0
-                      ? room.images[0]
-                      : "/default-room.jpg"
-                  }
-                  alt={room.name}
-                  width={400}
-                  height={250}
-                  className="w-full h-48 object-cover"
-                />
+                {/* ✅ Improved Image Styling */}
+                <div className="relative">
+                  <Image
+                    src={
+                      room.images?.length > 0
+                        ? room.images[0]
+                        : "/default-room.jpg"
+                    }
+                    alt={room.name}
+                    width={400}
+                    height={250}
+                    className="w-full h-64 object-cover transition-all duration-300 ease-in-out hover:brightness-90"
+                  />
+                </div>
+
+                {/* 📋 Room Details */}
                 <div className="p-6">
                   <h3 className="text-2xl font-bold text-primary">
                     {room.name}
                   </h3>
 
-                  {/* ✅ Display Pricing */}
-                  <p className="text-gray-600 mt-2">
-                    <span className="font-semibold">Full Board:</span> $
-                    {room.prices?.fullBoard}
-                  </p>
-                  <p className="text-gray-600">
-                    <span className="font-semibold">Half Board:</span> $
-                    {room.prices?.halfBoard}
-                  </p>
-                  <p className="text-gray-600">
-                    <span className="font-semibold">Hourly:</span> $
-                    {room.prices?.hourly}
-                  </p>
+                  {/* 💰 Pricing Section with Icons */}
+                  <div className="mt-3 text-gray-700 space-y-2">
+                    <p className="flex items-center gap-2">
+                      <span className="text-xl text-gold-500">💎</span>
+                      <span className="font-medium">Full Board:</span> LKR{" "}
+                      {room.prices?.fullBoard}
+                    </p>
+                    <p className="flex items-center gap-2">
+                      <span className="text-xl text-gold-500">🍽️</span>
+                      <span className="font-medium">Half Board:</span> LKR{" "}
+                      {room.prices?.halfBoard}
+                    </p>
+                    <p className="flex items-center gap-2">
+                      <span className="text-xl text-gold-500">⏳</span>
+                      <span className="font-medium">Hourly:</span> LKR{" "}
+                      {room.prices?.hourly}
+                    </p>
+                  </div>
 
-                  {/* ✅ View Room Button */}
+                  {/* 🔗 View Room Button */}
                   <Link href={`/rooms/${room._id}`}>
-                    <button className="mt-4 bg-secondary text-white px-4 py-2 rounded hover:bg-red-700 transition">
+                    <button className="mt-6 w-full bg-secondary text-white font-semibold px-5 py-3 rounded-lg shadow-md hover:bg-red-700 transition-all">
                       View Room
                     </button>
                   </Link>
